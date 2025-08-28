@@ -1,4 +1,5 @@
-import { chromium, Browser, Page } from '@playwright/browser-chromium';
+import { chromium, Browser, Page } from 'playwright-core';
+import chromiumPkg from '@sparticuz/chromium';
 import { logger } from './logger';
 import { ConversionOptions, DEFAULT_CONVERSION_OPTIONS } from './types';
 
@@ -9,24 +10,17 @@ async function getBrowser(): Promise<Browser> {
     logger.info('Starting new Playwright browser instance', 'PLAYWRIGHT');
     
     try {
+      const executablePath = await chromiumPkg.executablePath();
+      
       browserInstance = await chromium.launch({
+        executablePath,
         headless: true,
         args: [
+          ...chromiumPkg.args,
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--no-first-run',
-          '--no-zygote',
-          '--disable-gpu',
           '--disable-web-security',
-          '--disable-features=VizDisplayCompositor',
-          '--disable-background-timer-throttling',
-          '--disable-backgrounding-occluded-windows',
-          '--disable-renderer-backgrounding',
-          '--disable-extensions',
-          '--disable-plugins',
-          '--disable-ipc-flooding-protection',
         ],
       });
 

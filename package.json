@@ -10,9 +10,10 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@playwright/browser-chromium": "^1.55.0",
+    "@sparticuz/chromium": "^128.0.0",
     "@vercel/og": "^0.8.5",
     "next": "^14.0.0",
+    "playwright-core": "^1.55.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
