@@ -10,7 +10,7 @@ export interface LogEntry {
   level: string;
   message: string;
   context?: string;
-  data?: Record<string, unknown>;
+  data?: any;
 }
 
 class Logger {
@@ -36,7 +36,7 @@ class Logger {
     }
   }
 
-  private formatLog(level: string, message: string, context?: string, data?: Record<string, unknown>): LogEntry {
+  private formatLog(level: string, message: string, context?: string, data?: any): LogEntry {
     return {
       timestamp: new Date().toISOString(),
       level,
@@ -50,7 +50,7 @@ class Logger {
     return level >= this.logLevel;
   }
 
-  private log(level: LogLevel, levelName: string, message: string, context?: string, data?: Record<string, unknown>): void {
+  private log(level: LogLevel, levelName: string, message: string, context?: string, data?: any): void {
     if (!this.shouldLog(level)) return;
 
     const logEntry = this.formatLog(levelName, message, context, data);
@@ -68,19 +68,19 @@ class Logger {
     }
   }
 
-  debug(message: string, context?: string, data?: Record<string, unknown>): void {
+  debug(message: string, context?: string, data?: any): void {
     this.log(LogLevel.DEBUG, 'DEBUG', message, context, data);
   }
 
-  info(message: string, context?: string, data?: Record<string, unknown>): void {
+  info(message: string, context?: string, data?: any): void {
     this.log(LogLevel.INFO, 'INFO', message, context, data);
   }
 
-  warn(message: string, context?: string, data?: Record<string, unknown>): void {
+  warn(message: string, context?: string, data?: any): void {
     this.log(LogLevel.WARN, 'WARN', message, context, data);
   }
 
-  error(message: string, context?: string, data?: Record<string, unknown>): void {
+  error(message: string, context?: string, data?: any): void {
     this.log(LogLevel.ERROR, 'ERROR', message, context, data);
   }
 

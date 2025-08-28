@@ -1,5 +1,4 @@
-import { chromium, Browser, Page } from 'playwright-core';
-import chromiumPkg from '@sparticuz/chromium';
+import puppeteer, { Browser, Page } from 'puppeteer';
 import { logger } from './logger';
 import { ConversionOptions, DEFAULT_CONVERSION_OPTIONS } from './types';
 
@@ -7,28 +6,31 @@ let browserInstance: Browser | null = null;
 
 async function getBrowser(): Promise<Browser> {
   if (!browserInstance || !browserInstance.isConnected()) {
-    logger.info('Starting new Playwright browser instance', 'PLAYWRIGHT');
+    logger.info('Starting new Puppeteer browser instance', 'PUPPETEER');
     
-    try {
-      const executablePath = await chromiumPkg.executablePath();
-      
-      browserInstance = await chromium.launch({
-        executablePath,
-        headless: true,
-        args: [
-          ...chromiumPkg.args,
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-web-security',
-        ],
-      });
+    browserInstance = await puppeteer.launch({
+      headless: 'new',
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        '--disable-gpu',
+        '--disable-web-security',
+        '--disable-features=VizDisplayCompositor',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding',
+        '--disable-extensions',
+        '--disable-plugins',
+        '--disable-ipc-flooding-protection',
+      ],
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+    });
 
-      logger.info('Playwright browser started successfully', 'PLAYWRIGHT');
-    } catch (error) {
-      logger.error('Failed to launch browser', 'PLAYWRIGHT', { error: error instanceof Error ? error.message : 'Unknown error' });
-      throw error;
-    }
+    logger.info('Puppeteer browser started successfully', 'PUPPETEER');
   }
   
   return browserInstance;
@@ -50,35 +52,15 @@ export async function convertHtmlToPng(
     });
 
     const browser = await getBrowser();
-    page = await browser.newPage({
-      viewport: {
-        width: finalOptions.width,
-        height: finalOptions.height,
-      },
+    page = await browser.newPage();
+
+    await page.setViewport({
+      width: finalOptions.width,
+      height: finalOptions.height,
     });
 
-    const fullHtml = html.includes('<html>') ? html : `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <style>
-            body { 
-              margin: 0; 
-              padding: 20px; 
-              font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
-              box-sizing: border-box;
-            }
-            * { box-sizing: border-box; }
-          </style>
-        </head>
-        <body>${html}</body>
-      </html>
-    `;
-
-    await page.setContent(fullHtml, {
-      waitUntil: 'networkidle',
+    await page.setContent(html, {
+      waitUntil: 'networkidle0',
       timeout: 30000,
     });
 
@@ -86,12 +68,6 @@ export async function convertHtmlToPng(
       type: 'png',
       fullPage: finalOptions.fullPage,
       omitBackground: finalOptions.transparent,
-      clip: finalOptions.fullPage ? undefined : {
-        x: 0,
-        y: 0,
-        width: finalOptions.width,
-        height: finalOptions.height,
-      },
     });
 
     const duration = Date.now() - startTime;
@@ -107,7 +83,7 @@ export async function convertHtmlToPng(
   } finally {
     if (page) {
       await page.close().catch((error) => {
-        logger.warn('Failed to close Playwright page', 'PLAYWRIGHT', { error: error instanceof Error ? error.message : 'Unknown error' });
+        logger.warn('Failed to close Puppeteer page', 'PUPPETEER', { error: error.message });
       });
     }
   }
@@ -117,12 +93,12 @@ export async function closeBrowser(): Promise<void> {
   if (browserInstance && browserInstance.isConnected()) {
     await browserInstance.close();
     browserInstance = null;
-    logger.info('Playwright browser closed', 'PLAYWRIGHT');
+    logger.info('Puppeteer browser closed', 'PUPPETEER');
   }
 }
 
 process.on('beforeExit', () => {
   closeBrowser().catch((error) => {
-    logger.error('Failed to close browser on exit', 'PLAYWRIGHT', { error: error instanceof Error ? error.message : 'Unknown error' });
+    logger.error('Failed to close browser on exit', 'PUPPETEER', { error: error.message });
   });
 });

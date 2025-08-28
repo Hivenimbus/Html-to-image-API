@@ -1,6 +1,6 @@
 # HTML to Image API
 
-Uma API Next.js simples que converte HTML em imagens PNG usando Playwright Core, otimizada para deploy no Vercel.
+Uma API Next.js simples que converte HTML em imagens PNG usando Puppeteer.
 
 ## Funcionalidades
 
@@ -75,40 +75,24 @@ Exemplo de log:
 [2024-01-01T12:00:01.100Z] INFO [RESPONSE]: POST /api/html-to-image - 200
 ```
 
-## Deploy no Vercel
+## Produção
 
-### 1. Preparação
-```bash
-npm run build    # Verificar se o build está ok
-npm run type-check    # Verificar types
-```
-
-### 2. Conectar ao Vercel
-1. Instale a CLI do Vercel: `npm i -g vercel`
-2. Execute: `vercel`
-3. Siga as instruções para conectar o projeto
-
-### 3. Configurar Variáveis de Ambiente
-No painel do Vercel, configure:
-```
-API_TOKEN=seu-token-seguro-aqui
-LOG_LEVEL=info
-```
-
-### 4. Deploy
-```bash
-vercel --prod
-```
-
-### Configurações Automáticas
-- `vercel.json`: Configurações de tempo limite e região
-- `next.config.js`: Otimizações para Vercel
-- Playwright Core: Configurado para usar o Chrome do Vercel
-
-### Build Local (desenvolvimento)
+### Build
 ```bash
 npm run build
 npm start
+```
+
+### Docker (opcional)
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD ["npm", "start"]
 ```
 
 ## Estrutura do Projeto
@@ -121,15 +105,19 @@ src/
 │   └── page.tsx                    # Página de documentação
 └── lib/
     ├── auth.ts                     # Autenticação por token
-    ├── html-to-image.ts           # Conversão com Playwright Core
+    ├── html-to-image.ts           # Conversão com Puppeteer
     ├── logger.ts                  # Sistema de logging
     └── types.ts                   # Tipos TypeScript
 ```
 
-## Mudanças para Vercel
+ sudo apt-get update && sudo apt-get install -y libnss3 libnss3-dev libatk-bridge2.0-0
+  libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libasound2 libpangocairo-1.0-0
+   libatk1.0-0 libcairo-gobject2 libgtk-3-0 libgdk-pixbuf2.0-0 libxss1 libgconf-2-4
 
-- ✅ Substituído Puppeteer por Playwright Core (menor footprint)
-- ✅ Configurado `vercel.json` com timeouts apropriados
-- ✅ Adicionado `.env.example` para documentação
-- ✅ Otimizado `next.config.js` para production
-- ✅ Removidas dependências desnecessárias
+  Alternatively, you can install Google Chrome directly, which includes all dependencies:
+
+  wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee
+  /etc/apt/sources.list.d/google-chrome.list
+  sudo apt-get update
+  sudo apt-get install -y google-chrome-stable
