@@ -1,4 +1,4 @@
-import { chromium, Browser, Page } from 'playwright-core';
+import { chromium, Browser, Page } from '@playwright/browser-chromium';
 import { logger } from './logger';
 import { ConversionOptions, DEFAULT_CONVERSION_OPTIONS } from './types';
 
@@ -27,10 +27,7 @@ async function getBrowser(): Promise<Browser> {
           '--disable-extensions',
           '--disable-plugins',
           '--disable-ipc-flooding-protection',
-          '--single-process',
-          '--no-first-run',
         ],
-        executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH,
       });
 
       logger.info('Playwright browser started successfully', 'PLAYWRIGHT');

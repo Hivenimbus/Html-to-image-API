@@ -9,8 +9,5 @@
     "env": {
       "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD": "1"
     }
-  },
-  "env": {
-    "PLAYWRIGHT_EXECUTABLE_PATH": "/opt/hostedtoolcache/chromium/latest/x64/chrome"
   }
 }
