@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     let body: HtmlToImageRequest;
     try {
       body = await request.json();
-    } catch (error) {
+    } catch {
       const duration = Date.now() - startTime;
       logger.response('POST', '/api/html-to-image', 400, duration);
       return createErrorResponse('Invalid JSON in request body', 400);

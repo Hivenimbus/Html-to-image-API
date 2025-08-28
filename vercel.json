@@ -1,0 +1,16 @@
+{
+  "functions": {
+    "src/app/api/html-to-image/route.ts": {
+      "maxDuration": 30
+    }
+  },
+  "regions": ["iad1"],
+  "build": {
+    "env": {
+      "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD": "1"
+    }
+  },
+  "env": {
+    "PLAYWRIGHT_EXECUTABLE_PATH": "/opt/hostedtoolcache/chromium/latest/x64/chrome"
+  }
+}
