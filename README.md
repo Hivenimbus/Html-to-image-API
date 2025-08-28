@@ -109,3 +109,15 @@ src/
     ├── logger.ts                  # Sistema de logging
     └── types.ts                   # Tipos TypeScript
 ```
+
+ sudo apt-get update && sudo apt-get install -y libnss3 libnss3-dev libatk-bridge2.0-0
+  libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libasound2 libpangocairo-1.0-0
+   libatk1.0-0 libcairo-gobject2 libgtk-3-0 libgdk-pixbuf2.0-0 libxss1 libgconf-2-4
+
+  Alternatively, you can install Google Chrome directly, which includes all dependencies:
+
+  wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee
+  /etc/apt/sources.list.d/google-chrome.list
+  sudo apt-get update
+  sudo apt-get install -y google-chrome-stable

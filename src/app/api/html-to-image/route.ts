@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
       ...(body.height && body.height > 0 && { height: body.height }),
       ...(body.quality && body.quality > 0 && body.quality <= 100 && { quality: body.quality }),
       ...(body.fullPage === true && { fullPage: true }),
+      ...(body.transparent === true && { transparent: true }),
     };
 
     const imageBuffer = await convertHtmlToPng(body.html, options);

@@ -4,6 +4,7 @@ export interface HtmlToImageRequest {
   height?: number;
   quality?: number;
   fullPage?: boolean;
+  transparent?: boolean;
 }
 
 export interface ApiErrorResponse {
@@ -17,6 +18,7 @@ export interface ConversionOptions {
   height: number;
   quality: number;
   fullPage: boolean;
+  transparent: boolean;
 }
 
 export const DEFAULT_CONVERSION_OPTIONS: ConversionOptions = {
@@ -24,4 +26,5 @@ export const DEFAULT_CONVERSION_OPTIONS: ConversionOptions = {
   height: 800,
   quality: 90,
   fullPage: false,
+  transparent: false,
 };

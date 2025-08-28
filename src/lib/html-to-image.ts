@@ -67,6 +67,7 @@ export async function convertHtmlToPng(
     const screenshot = await page.screenshot({
       type: 'png',
       fullPage: finalOptions.fullPage,
+      omitBackground: finalOptions.transparent,
     });
 
     const duration = Date.now() - startTime;
