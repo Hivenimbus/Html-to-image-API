@@ -121,3 +121,88 @@ src/
   /etc/apt/sources.list.d/google-chrome.list
   sudo apt-get update
   sudo apt-get install -y google-chrome-stable
+
+
+  Comandos de Instalação -------
+
+  
+Node.js 18+
+
+  curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+  sudo apt install -y nodejs
+
+  
+Dependências essenciais do sistema
+
+  sudo apt update
+  sudo apt install -y curl wget gnupg2 software-properties-common
+
+  
+Todas as dependências do Puppeteer em um comando
+
+  sudo apt install -y \
+    libnss3 \
+    libnss3-dev \
+    libatk-bridge2.0-0 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libasound2 \
+    libpangocairo-1.0-0 \
+    libatk1.0-0 \
+    libcairo-gobject2 \
+    libgtk-3-0 \
+    libgdk-pixbuf2.0-0 \
+    libxss1 \
+    libgconf-2-4 \
+    fonts-liberation \
+    libappindicator3-1 \
+    libatspi2.0-0 \
+    libnspr4 \
+    xdg-utils
+
+  
+Google Chrome (Recomendado)
+
+  wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee
+  /etc/apt/sources.list.d/google-chrome.list
+  sudo apt update
+  sudo apt install -y google-chrome-stable
+
+  OU se preferir Chromium:
+
+  sudo apt install -y chromium-browser
+
+  Comando único (tudo junto)
+
+  sudo apt update && sudo apt install -y \
+    nodejs \
+    npm \
+    libnss3 \
+    libnss3-dev \
+    libatk-bridge2.0-0 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libasound2 \
+    libpangocairo-1.0-0 \
+    libatk1.0-0 \
+    libcairo-gobject2 \
+    libgtk-3-0 \
+    libgdk-pixbuf2.0-0 \
+    libxss1 \
+    libgconf-2-4 \
+    fonts-liberation \
+    libappindicator3-1 \
+    libatspi2.0-0 \
+    libnspr4 \
+    xdg-utils \
+    google-chrome-stable
+
+  Execute esses comandos no seu servidor Linux e sua aplicação funcionará perfeitamente no
+  Easypanel.
