@@ -1,0 +1,94 @@
+{
+  "name": "html-to-image-api",
+  "description": "HTML to Image conversion API using Next.js and Puppeteer",
+  "type": "app",
+  "source": {
+    "type": "github",
+    "owner": "jpcb2020",
+    "repo": "Html-to-image-API",
+    "branch": "main"
+  },
+  "build": {
+    "type": "dockerfile",
+    "dockerfile": "Dockerfile"
+  },
+  "deploy": {
+    "type": "docker",
+    "image": "html-to-image-api:latest",
+    "port": 3000,
+    "replicas": 1
+  },
+  "domains": [
+    {
+      "host": "html-to-image-api",
+      "port": 3000
+    }
+  ],
+  "env": [
+    {
+      "key": "NODE_ENV",
+      "value": "production"
+    },
+    {
+      "key": "API_TOKEN",
+      "value": "",
+      "required": true,
+      "description": "API token for authentication - set this in EasyPanel dashboard"
+    },
+    {
+      "key": "LOG_LEVEL",
+      "value": "info",
+      "description": "Logging level (debug, info, warn, error)"
+    },
+    {
+      "key": "PUPPETEER_EXECUTABLE_PATH",
+      "value": "/usr/bin/chromium-browser"
+    },
+    {
+      "key": "NEXT_TELEMETRY_DISABLED",
+      "value": "1"
+    },
+    {
+      "key": "PORT",
+      "value": "3000"
+    },
+    {
+      "key": "HOSTNAME",
+      "value": "0.0.0.0"
+    }
+  ],
+  "volumes": [
+    {
+      "name": "tmp-cache",
+      "mountPath": "/tmp",
+      "size": "1Gi"
+    }
+  ],
+  "healthCheck": {
+    "httpGet": {
+      "path": "/api/html-to-image",
+      "port": 3000
+    },
+    "initialDelaySeconds": 30,
+    "periodSeconds": 30,
+    "timeoutSeconds": 10,
+    "failureThreshold": 3
+  },
+  "resources": {
+    "requests": {
+      "memory": "512Mi",
+      "cpu": "250m"
+    },
+    "limits": {
+      "memory": "1Gi",
+      "cpu": "500m"
+    }
+  },
+  "securityContext": {
+    "runAsNonRoot": false,
+    "capabilities": {
+      "add": ["SYS_ADMIN"]
+    }
+  },
+  "restartPolicy": "Always"
+}
